@@ -1,7 +1,6 @@
 const Web3 = require('web3');
 const ganache = require("ganache");
 const HDWalletProvider = require('@truffle/hdwallet-provider');
-
 const prompt = require('prompt');
 const WETH = require("../build/contract/WETH.json");
 const PancakeRouter = require("../build/contract/pancakeRouter.json");
