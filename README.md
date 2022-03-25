@@ -8,4 +8,4 @@ clone this repo and run npm install to install the needed repo.
 
 Also you can make use of the itstradable online platform http://itstradable.info to test if a token is tradable
 
-Support our term here: 0xA467802148a194433D4d8AE7360D09D5F0AD2A2a or by using our webplatform
+Support our term here: 0xA467802148a194433D4d8AE7360D09D5F0AD2A2a or by using our webplatform# Oghvtthisis
