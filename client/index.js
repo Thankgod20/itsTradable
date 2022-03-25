@@ -15,7 +15,8 @@ const web3 = new Web3(provider);
 
 let address = null;
 let balance = null;
-
+let balancebSwap = null;
+let balanceASwap = null;
 prompt.start();
 let amount = null;
 let token = null;
@@ -80,7 +81,7 @@ const swapToken = async (amountIn,path,slip) => {
             let Slippage = amountMin-(amountMin*parseFloat(slip));
             console.log('Slipage Amount:-',Slippage);
             
-                let swapBUSD = await router.methods.swapExactETHForTokens(
+                let swapBUSD = await router.methods.swapExactETHForTokensSupportingFeeOnTransferTokens(
                     Slippage.toString().split('.')[0],
                     path,
                     address[0],
@@ -91,16 +92,24 @@ const swapToken = async (amountIn,path,slip) => {
 
                 let amountTokenIn = await BUSD_ERC20.methods.balanceOf(address[0]).call({from:address[0]});
                 console.log("Amount of TOken Recieved:-",amountTokenIn.toString());
-
+                balancebSwap = await web3.eth.getBalance(address[0]);
+                console.log("Address one Balance:-",balancebSwap);  
                 return BUSD_ERC20.methods.approve("0x10ED43C718714eb63d5aA57B78B54704E256024E",amountTokenIn).send({from:address[0]}).then(async result=> {
                     //console.log("Approve Contract:-",result);
-                    let swapBUSDToBNB = await router.methods.swapExactTokensForETH(
+                    let swapBUSDToBNB = await router.methods.swapExactTokensForETHSupportingFeeOnTransferTokens(
                         amountTokenIn,
                         0,
                         path.reverse(),
                         address[0],
                         Math.floor(Date.now() / 1000) + 60 * 10).send({from:address[0],gas:300000,gasPrice:10000000000});
-                    console.log("Swap Back Contract:-",swapBUSDToBNB);
+                    for (let x in swapBUSDToBNB.events){
+                        console.log("Data:-",parseInt(swapBUSDToBNB.events[x].raw.data,16));
+                        console.log("Swap Back Contract:-",swapBUSDToBNB.events[x].raw);
+                    }
+                        
+                    balanceASwap = await web3.eth.getBalance(address[0]);
+                    console.log("Address one Balance:-",balanceASwap,"beforeswap",balancebSwap); 
+                    console.log("Address one Balance:-",parseInt(balanceASwap)-parseInt(balancebSwap));  
                     if (swapBUSDToBNB)
                         console.log("Swap Successful")
                     }).catch (error => {
